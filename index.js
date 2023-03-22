@@ -22,9 +22,10 @@ function FindTown(data){
     let Town = data.find('div[class=title] h3 a span').text();
     if (Town.includes('(') != 0) {
         let TownMatch = Town.match(/(.*) \(([^)]+)\)/);
-        return TownMatch !== null ? TownMatch[2] : Town.replace('()', '');
+        // return TownMatch !== null ? TownMatch[2] : Town.replace('()', '');
+        return TownMatch !== null ? TownMatch[2] : 'Merkez';
     }else{
-        return 'Merkez'
+        return Town
     }
 }
 
