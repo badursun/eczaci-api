@@ -24,7 +24,7 @@ function FindTown(data){
         let TownMatch = Town.match(/(.*) \(([^)]+)\)/);
         return TownMatch !== null ? TownMatch[2] : Town.replace('()', '');
     }else{
-        return Town
+        return 'Merkez'
     }
 }
 
