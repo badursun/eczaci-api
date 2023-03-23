@@ -27,7 +27,30 @@ function FindTown(data){
     }else{
         return Town
     }
-}
+};
+
+function FindDate(DateVal) {
+    let Tarih, TarihDump;
+
+    if (DateVal.includes('-')) {
+        Tarih = DateVal.split(' - ')[1]
+        TarihDump = Tarih.split(' ');
+        Tarih = TarihDump[2] + '-' + TarihDump[1] + '-' + TarihDump[0]
+    }
+
+    function Aylar(Ay) {
+        return Ay.replace('Ocak', '01').replace('Şubat', '02').replace('Mart', '03')
+            .replace('Nisan', '04').replace('Mayıs', '05').replace('Haziran', '06')
+            .replace('Temmuz', '07').replace('Ağustos', '08').replace('Eylül', '09')
+            .replace('Ekim', '10').replace('Kasım', '11').replace('Aralık', '12')
+    }
+
+    if (DateVal.includes('-')) {
+        return Aylar(Tarih)
+    } else {
+        return '2023-01-01'
+    }
+};
 
 app.get('/get/:city', async (req, res) => {
     var city = req.params.city;
@@ -41,9 +64,10 @@ app.get('/get/:city', async (req, res) => {
             return response.text()
         }).then((body) => {
             const $ = cheerio.load(body);
-
+            const Tarih = FindDate( $('title').text() );
             $('figure').each(function (i, elem) {
                 datas[i] = {
+                    date    : Tarih,
                     city    : city.charAt(0).toUpperCase() + city.slice(1),
                     town    : FindTown( $(this) ),
                     name    : FindPharmacyName( $(this) ),
@@ -70,8 +94,10 @@ app.get('/get/:city/:town', async (req, res) => {
             return response.text()
         }).then((body) => {
             const $ = cheerio.load(body);
+            const Tarih = FindDate( $('title').text() );
             $('figure').each(function (i, elem) {
                 datas[i] = {
+                    date    : Tarih,
                     city    : city.charAt(0).toUpperCase() + city.slice(1),
                     town    : FindTown( $(this) ),
                     name    : FindPharmacyName( $(this) ),
