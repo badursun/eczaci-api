@@ -3,8 +3,9 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const slugify = require('slugify');
 
-const API_URI = 'https://www.haberturk.com/nobetci-eczaneler/{0}/{1}';
-const API_CITY_URI = 'https://www.haberturk.com/nobetci-eczaneler/{0}';
+const ms = Date.now();
+const API_URI = 'https://www.haberturk.com/nobetci-eczaneler/{0}/{1}/?nc='+ms;
+const API_CITY_URI = 'https://www.haberturk.com/nobetci-eczaneler/{0}/?nc='+ms;
 
 const app = express();
 
@@ -56,7 +57,7 @@ app.get('/get/:city', async (req, res) => {
     var city = req.params.city;
 
     var datas = [];
-    await fetch( API_CITY_URI.replace('{0}', slugify(city)), {}, 3000)
+    await fetch( API_CITY_URI.replace('{0}', slugify(city)), { headers:{'Cache-Control': 'no-cache'} }, 3000)
         .then((response) => {
             if (response.status >= 400 && response.status < 600) {
               throw new Error("Bad response from server");
@@ -86,7 +87,7 @@ app.get('/get/:city/:town', async (req, res) => {
     var town = req.params.town;
 
     var datas = [];
-    await fetch( API_URI.replace('{0}', slugify(city)).replace('{1}', slugify(town)), {}, 3000)
+    await fetch( API_URI.replace('{0}', slugify(city)).replace('{1}', slugify(town)), { headers:{'Cache-Control': 'no-cache'} }, 3000)
         .then((response) => {
             if (response.status >= 400 && response.status < 600) {
               throw new Error("Bad response from server");
